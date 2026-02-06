@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/Product")
+@RequestMapping("/product")
 public class ProductController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class ProductController {
     @PostMapping("/create")
     public String createProductPost(@ModelAttribute Product product, Model model){
         service.create(product);
-        return "redirected:list";
+        return "redirect:list";
     }
 
     @GetMapping("/list")
