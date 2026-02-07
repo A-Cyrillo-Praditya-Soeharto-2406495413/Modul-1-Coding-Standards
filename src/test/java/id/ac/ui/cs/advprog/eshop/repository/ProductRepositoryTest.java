@@ -66,4 +66,62 @@ class ProductRepositoryTest {
         assertEquals(product2.getProductId(), savedProduct.getProductId());
         assertFalse(productIterator.hasNext());
     }
+
+    @Test
+    void testEditProductTrue() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        Product updatedProduct = new Product();
+        updatedProduct.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        updatedProduct.setProductName("Sampo Cap Usep");
+        updatedProduct.setProductQuantity(50);
+        productRepository.update(updatedProduct);
+
+        Product result = productRepository.findById("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        assertEquals("Sampo Cap Usep", result.getProductName());
+        assertEquals(50, result.getProductQuantity());
+    }
+
+    @Test
+    void testEditProductFalse() {
+        Product product = new Product();
+        product.setProductId("existing-id");
+        product.setProductName("Existing Product");
+        productRepository.create(product);
+
+        Product nonExistentProduct = new Product();
+        nonExistentProduct.setProductId("random-id");
+        nonExistentProduct.setProductName("Ghost Product");
+
+        Product result = productRepository.update(nonExistentProduct);
+        assertNull(result);
+
+        Product original = productRepository.findById("existing-id");
+        assertEquals("Existing Product", original.getProductName());
+    }
+
+    @Test
+    void testDeleteProductTrue() {
+        Product product = new Product();
+        product.setProductId("delete-me-id");
+        product.setProductName("To Be Deleted");
+        productRepository.create(product);
+
+        productRepository.delete("delete-me-id");
+        assertNull(productRepository.findById("delete-me-id"));
+
+        Iterator<Product> iterator = productRepository.findAll();
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void testDeleteProductFalse() {
+        productRepository.delete("random-id");
+        Iterator<Product> iterator = productRepository.findAll();
+        assertFalse(iterator.hasNext());
+    }
 }
