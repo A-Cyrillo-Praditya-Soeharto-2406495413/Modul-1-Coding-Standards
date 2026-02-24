@@ -1,6 +1,7 @@
 plugins {
     java
     jacoco
+    pmd
     id("org.springframework.boot") version "3.5.10"
     id("io.spring.dependency-management") version "1.1.7"
 }
@@ -13,6 +14,11 @@ val seleniumJavaVersion = "4.14.1"
 val seleniumJupiterVersion = "5.0.1"
 val webdrivermanagerVersion = "5.6.3"
 
+pmd {
+    isConsoleOutput = true
+    toolVersion = "7.0.0"
+    ruleSets = listOf("category/java/errorprone.xml", "category/java/bestpractices.xml")
+}
 
 java {
     toolchain {
