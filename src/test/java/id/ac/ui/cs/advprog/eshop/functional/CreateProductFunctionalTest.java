@@ -34,7 +34,6 @@ class CreateProductFunctionalTest {
 
     @Test
     void createProduct_isCorrect(ChromeDriver driver) throws Exception {
-
         driver.get(baseUrl + "/product/create");
         WebElement nameInput = driver.findElement(By.name("productName"));
         nameInput.sendKeys("Sampo Cap Bambang");
@@ -44,11 +43,12 @@ class CreateProductFunctionalTest {
         submitButton.click();
         String currentUrl = driver.getCurrentUrl();
 
-        assertTrue(currentUrl.contains("/product/list"));
+        assertTrue(currentUrl.contains("/product/list"), "Abis klik submit user diarahkan ke product list");
 
         String pageSource = driver.getPageSource();
 
-        assertTrue(pageSource.contains("Sampo Cap Bambang"));
-        assertTrue(pageSource.contains("100"));
+        assertTrue(pageSource.contains("Sampo Cap Bambang"), "list produknya harus ada nama produk baru (Sampo Cap Bambang)");
+
+        assertTrue(pageSource.contains("100"), "list produknya harus ada quantitas yang baru ditambah (100)");
     }
 }
