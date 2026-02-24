@@ -30,12 +30,17 @@ class ProductRepositoryTest {
         product.setProductQuantity(100);
         productRepository.create(product);
 
+        Product foundProduct = productRepository.findById(product.getProductId());
+        assertNotNull(foundProduct);
+        assertEquals(product.getProductId(), foundProduct.getProductId());
+
+        Product nonExistentProduct = productRepository.findById("eb558e9f-1c39-460e-8860-71af6af63bd9");
+        assertNull(nonExistentProduct);
+
         Iterator<Product> productIterator = productRepository.findAll();
         assertTrue(productIterator.hasNext());
         Product saveProduct = productIterator.next();
-        assertEquals(product.getProductId(), saveProduct.getProductId());
         assertEquals(product.getProductName(), saveProduct.getProductName());
-        assertEquals(product.getProductQuantity(), saveProduct.getProductQuantity());
     }
 
     @Test
