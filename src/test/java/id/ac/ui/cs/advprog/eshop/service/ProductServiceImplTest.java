@@ -76,7 +76,7 @@ class ProductServiceImplTest {
     @Test
     void testDelete() {
         productService.create(product);
-        productService.delete("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        productService.deleteProductById("eb558e9f-1c39-460e-8860-71af6af63bd6");
 
         List<Product> result = productService.findAll();
         assertTrue(result.isEmpty());
