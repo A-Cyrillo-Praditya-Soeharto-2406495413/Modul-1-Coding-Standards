@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.eshop.service;
 
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.repository.ProductRepository;
+import id.ac.ui.cs.advprog.eshop.repository.ProductRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,7 @@ class ProductServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        productRepository = new ProductRepository();
+        productRepository = new ProductRepositoryImpl();
         productService = new ProductServiceImpl();
 
         setInternalState(productService, "productRepository", productRepository);
