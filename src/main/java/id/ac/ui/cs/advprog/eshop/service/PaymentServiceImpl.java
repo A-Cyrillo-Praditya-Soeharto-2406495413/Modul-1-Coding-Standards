@@ -23,25 +23,45 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
-        // TODO: Implement add payment
-        return null;
+        Payment payment = Payment.builder()
+                .id(order.getId())
+                .method(method)
+                .status("PENDING")
+                .paymentData(paymentData)
+                .build();
+
+        return paymentRepository.save(payment);
     }
 
     @Override
     public Payment setStatus(Payment payment, String status) {
-        // TODO: Implement set status
-        return null;
+        Payment updatedPayment = Payment.builder()
+                .id(payment.getId())
+                .method(payment.getMethod())
+                .status(status)
+                .paymentData(payment.getPaymentData())
+                .build();
+
+        paymentRepository.save(updatedPayment);
+
+        Order order = orderRepository.findById(payment.getId());
+        if (order != null) {
+            String orderStatus = "SUCCESS".equals(status) ? "SUCCESS" : "FAILED";
+            Order updatedOrder = new Order(order.getId(), order.getProducts(),
+                    order.getOrderTime(), order.getAuthor(), orderStatus);
+            orderRepository.save(updatedOrder);
+        }
+
+        return updatedPayment;
     }
 
     @Override
     public Payment getPayment(String paymentId) {
-        // TODO: Implement get payment
-        return null;
+        return paymentRepository.findById(paymentId);
     }
 
     @Override
     public List<Payment> getAllPayments() {
-        // TODO: Implement get all payments
-        return null;
+        return paymentRepository.findAll();
     }
 }

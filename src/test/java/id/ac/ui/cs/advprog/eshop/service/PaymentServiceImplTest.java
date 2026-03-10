@@ -7,8 +7,10 @@ import id.ac.ui.cs.advprog.eshop.repository.OrderRepository;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class PaymentServiceImplTest {
 
     @Mock
@@ -67,7 +70,6 @@ class PaymentServiceImplTest {
         products.add(product);
 
         Order order = new Order("order-1", products, System.currentTimeMillis(), "author");
-        order.setStatus("SUCCESS");
 
         Payment payment = Payment.builder()
                 .id("payment-1")
@@ -77,6 +79,7 @@ class PaymentServiceImplTest {
                 .build();
 
         when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(orderRepository.findById("payment-1")).thenReturn(order);
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Payment result = paymentService.setStatus(payment, "SUCCESS");
@@ -103,6 +106,7 @@ class PaymentServiceImplTest {
                 .build();
 
         when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(orderRepository.findById("payment-1")).thenReturn(order);
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Payment result = paymentService.setStatus(payment, "REJECTED");
