@@ -23,10 +23,12 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
+        String status = "PENDING";
+
         Payment payment = Payment.builder()
                 .id(order.getId())
                 .method(method)
-                .status("PENDING")
+                .status(status)
                 .paymentData(paymentData)
                 .build();
 
