@@ -46,12 +46,24 @@ public class PaymentServiceImpl implements PaymentService {
                 return "REJECTED";
             }
         } else if ("CASH_ON_DELIVERY".equals(method)) {
-            return "PENDING";
+            String address = paymentData.get("address");
+            String deliveryFee = paymentData.get("deliveryFee");
+            if (isValidCashOnDelivery(address, deliveryFee)) {
+                return "PENDING";
+            } else {
+                return "REJECTED";
+            }
         }
         return "PENDING";
     }
 
     private boolean isValidCashOnDelivery(String address, String deliveryFee) {
+        if (address == null || address.isEmpty()) {
+            return false;
+        }
+        if (deliveryFee == null || deliveryFee.isEmpty()) {
+            return false;
+        }
         return true;
     }
 
