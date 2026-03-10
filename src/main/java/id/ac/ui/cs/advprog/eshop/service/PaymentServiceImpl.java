@@ -45,8 +45,14 @@ public class PaymentServiceImpl implements PaymentService {
             } else {
                 return "REJECTED";
             }
+        } else if ("CASH_ON_DELIVERY".equals(method)) {
+            return "PENDING";
         }
         return "PENDING";
+    }
+
+    private boolean isValidCashOnDelivery(String address, String deliveryFee) {
+        return true;
     }
 
     private boolean isValidVoucher(String voucherCode) {
