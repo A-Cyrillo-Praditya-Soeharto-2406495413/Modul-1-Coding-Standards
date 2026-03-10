@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -23,7 +25,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
-        String status = "PENDING";
+        String status = determinePaymentStatus(method, paymentData);
 
         Payment payment = Payment.builder()
                 .id(order.getId())
@@ -33,6 +35,41 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
 
         return paymentRepository.save(payment);
+    }
+
+    private String determinePaymentStatus(String method, Map<String, String> paymentData) {
+        if ("VOUCHER".equals(method)) {
+            String voucherCode = paymentData.get("voucherCode");
+            if (isValidVoucher(voucherCode)) {
+                return "SUCCESS";
+            } else {
+                return "REJECTED";
+            }
+        }
+        return "PENDING";
+    }
+
+    private boolean isValidVoucher(String voucherCode) {
+        if (voucherCode == null) {
+            return false;
+        }
+
+        if (voucherCode.length() != 16) {
+            return false;
+        }
+
+        if (!voucherCode.startsWith("ESHOP")) {
+            return false;
+        }
+
+        Pattern numericPattern = Pattern.compile("\\d");
+        Matcher matcher = numericPattern.matcher(voucherCode);
+        int digitCount = 0;
+        while (matcher.find()) {
+            digitCount++;
+        }
+
+        return digitCount == 8;
     }
 
     @Override
